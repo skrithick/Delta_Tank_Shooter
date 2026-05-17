@@ -63,7 +63,7 @@ class Player {
 
     ctx.translate(this.x, this.y);
     ctx.rotate(this.turretAngle);
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = this.color;
     ctx.fillRect(0, -10, this.radius + 20, 20);
 
     ctx.restore();
@@ -71,9 +71,10 @@ class Player {
 }
 
 class Projectile extends Player {
-  constructor(x, y, radius, color, velocity, speed) {
+  constructor(x, y, radius, color, velocity, speed, owner) {
     super(x, y, radius, color, velocity);
     this.velocity = velocity;
+    this.owner = owner;
   } update() {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
@@ -85,6 +86,44 @@ class Projectile extends Player {
     ctx.fill();
   }
 }
+
+class Enemy extends Player {
+  constructor(x, y, radius, strength, MAX_HEALTH, eyeSight=200, fireRate=1000) {
+    super(x, y, radius=player.radius * 1.5, 'crimson', 2);
+    this.strength = strength;
+    this.lastShotTime = 0;
+    this.MAX_HEALTH = MAX_HEALTH;
+    this.eyeSight = eyeSight;
+    this.speed = player.speed * 0.75;
+    this.fireRate = fireRate;
+  } rotateTowardsPlayer() {
+    this.turretAngle = Math.PI + angleOfThisPoint(this.x, this.y);
+  } shoot() {
+    const theta = this.turretAngle;
+    const projectile = new Projectile(this.x + this.radius*Math.cos(theta), this.y + this.radius*Math.sin(theta), 5, "black", {
+      x: Math.cos(theta) * 5,
+      y: Math.sin(theta) * 5
+    }, 5, this);
+    projectiles.push(projectile);
+    projectile.draw();
+    projectile.update();
+  } update() {
+    const distanceToPlayer = Math.hypot(player.x - this.x, player.y - this.y);
+    if (distanceToPlayer < this.eyeSight) {
+      this.rotateTowardsPlayer();
+      this.x -= Math.cos(angleOfThisPoint(this.x, this.y)) * this.speed;
+      this.y -= Math.sin(angleOfThisPoint(this.x, this.y)) * this.speed;
+    }
+    const currentTime = Date.now();
+    if (currentTime - this.lastShotTime > this.fireRate && distanceToPlayer < this.eyeSight) {
+      this.shoot();
+      this.lastShotTime = currentTime; // Reset the timer
+    }
+    this.draw();
+  }
+}
+
+// PLAYER MOVEMENT
 
 let mouseX = 0;
 let mouseY = 0;
@@ -100,23 +139,35 @@ window.addEventListener('mousemove', (event) => {
   mouseY = event.clientY;
 });
 
+// PLAYER INIT
+
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
 const player = new Player(x, y, 25, "blue", 3);
 const projectiles = [];
 
-player.draw();
+// ENEMIES
+const enemies = [];
+
+const enemy = new Enemy(100, 100, 25, 10, 50, 400);
+enemies.push(enemy);
+
 
 function angleOfThisPoint(x, y) {
   return Math.atan2(y - player.y, x - player.x);
 }
 
-
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  enemies.forEach((enemy) => {
+    enemy.update();
+  });
+  enemies.forEach((enemy) => {
+    enemy.rotateTowardsPlayer();
+  });
   projectiles.forEach((projectile) => {
     projectile.update();
   });
@@ -159,7 +210,7 @@ window.addEventListener('click', (e) => {
   const projectile = new Projectile(player.x + player.radius*Math.cos(theta), player.y + player.radius*Math.sin(theta), 5, "red", {
     x: Math.cos(theta) * 5,
     y: Math.sin(theta) * 5
-  });
+  }, 5, player);
   projectiles.push(projectile);
   projectile.draw();
   projectile.update();
