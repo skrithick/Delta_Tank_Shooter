@@ -8,6 +8,7 @@ export class Player {
     this.y = y;
     this.radius = radius;
     this.color = color;
+    this.MAX_HEALTH = MAX_HEALTH;
     this.health = MAX_HEALTH;
     this.speed = speed;
     this.takingDamage = false;
@@ -47,7 +48,7 @@ export class Player {
     ctx.fillStyle = 'red';
     ctx.fillRect(topX, topY, 50, 6);
 
-    const healthPercentage = this.health / MAX_HEALTH;
+    const healthPercentage = this.health / this.MAX_HEALTH;
     ctx.fillStyle = '#32cd32';
     ctx.fillRect(topX, topY, 50 * healthPercentage, 6);
     

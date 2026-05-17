@@ -1,5 +1,7 @@
 import { Player } from "./Player.js";
-import { ctx } from "../main.js";
+import { ctx, player, projectiles, enemies } from "../main.js";
+import { rectangleAndCircleCollided, circlesCollided } from "./utils.js";
+import { Enemy } from "./enemy.js";
 
 export class Projectile extends Player {
   constructor(x, y, radius, color, velocity, speed, owner)
@@ -8,17 +10,71 @@ export class Projectile extends Player {
     this.velocity = velocity;
     this.owner = owner;
   }
-  update()
-  {
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-    this.draw();
-  }
   draw()
   {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
     ctx.fill();
+  }
+  checkCollisionWithWall(rooms) {
+    for (const room of rooms) {
+      for (const barrier of room.barriers) {
+        if (rectangleAndCircleCollided(barrier, this)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  checkCollisionWithSprite() {
+    if (this.owner instanceof Enemy) {
+      if (circlesCollided(player, this)) {
+        player.damage(20);
+        const index = projectiles.indexOf(this);
+        if (index > -1) {
+          projectiles.splice(index, 1);
+        }
+        return true;
+      }
+    }
+    if (this.owner == player) {
+        for (const enemy of enemies) {
+          if (circlesCollided(enemy, this)) {
+            enemy.damage(10);
+            if (enemy.health <= 0) {
+              const enemyIndex = enemies.indexOf(enemy);
+              if (enemyIndex > -1) {
+                enemies.splice(enemyIndex, 1);
+              }
+            }
+            const index = projectiles.indexOf(this);
+            if (index > -1) {
+              projectiles.splice(index, 1);
+            }
+            console.log(index);
+            return true;
+          }
+        }
+    }
+    return false;
+  }
+  update(rooms)
+  {
+    this.x += this.velocity.x;
+    if (this.checkCollisionWithWall(rooms)) {
+      this.x -= this.velocity.x
+      this.velocity.x *= (-1)
+    }
+
+    this.y += this.velocity.y;
+    if (this.checkCollisionWithWall(rooms)) {
+      this.y -= this.velocity.y
+      this.velocity.y *= (-1)
+    }
+
+    if (!this.checkCollisionWithSprite()) {
+      this.draw();
+    }
   }
 }

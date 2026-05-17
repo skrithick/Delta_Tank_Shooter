@@ -1,7 +1,7 @@
 import { Player } from "./Player.js";
 import { Projectile } from "./Projectile.js";
-import { angleOfThisPoint } from "./utils.js";
-import { projectiles, player, MAX_HEALTH } from "../main.js";
+import { angleOfThisPoint, rectangleAndCircleCollided } from "./utils.js";
+import { projectiles, player, MAX_HEALTH, rooms } from "../main.js";
 
 export class Enemy extends Player {
   constructor(x, y, radius, strength, MAX_HEALTH, eyeSight=200, fireRate=1000) {
@@ -10,6 +10,7 @@ export class Enemy extends Player {
     this.strength = strength;
     this.lastShotTime = 0;
     this.MAX_HEALTH = MAX_HEALTH;
+    this.health = MAX_HEALTH;
     this.eyeSight = eyeSight;
     this.speed = player.speed * 0.75;
     this.fireRate = fireRate;
@@ -27,16 +28,48 @@ export class Enemy extends Player {
     }, 5, this);
 
     projectiles.push(projectile);
-    projectile.draw();
-    projectile.update();
   }
   update() {
     const distanceToPlayer = Math.hypot(player.x - this.x, player.y - this.y);
 
     if (distanceToPlayer < this.eyeSight) {
       this.rotateTowardsPlayer();
-      this.x -= Math.cos(angleOfThisPoint(this.x, this.y)) * this.speed;
-      this.y -= Math.sin(angleOfThisPoint(this.x, this.y)) * this.speed;
+
+      let currentSpeed = {
+        x: -Math.cos(angleOfThisPoint(this.x, this.y)) * this.speed,
+        y: -Math.sin(angleOfThisPoint(this.x, this.y)) * this.speed
+      };
+
+      // remove everything but this line for necromancer guy
+      this.x += currentSpeed.x;
+      
+      let collided = false;
+      
+      rooms.forEach((room) => {
+        room.barriers.forEach(barrier => {
+          if (rectangleAndCircleCollided(barrier, this)) {
+            collided = true;
+          }
+        })
+      })
+    
+      collided && (this.x -= currentSpeed.x);
+      collided = false;
+      
+      // remove everything but this line for necromancer guy
+      this.y += currentSpeed.y;
+    
+      rooms.forEach((room) => {
+        room.barriers.forEach(barrier => {
+          if (rectangleAndCircleCollided(barrier, this)) {
+            collided = true;
+          }
+        })
+      })
+    
+      collided && (this.y -= currentSpeed.y);
+      collided = false;
+
     }
 
     const currentTime = Date.now();

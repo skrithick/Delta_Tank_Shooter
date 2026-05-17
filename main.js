@@ -2,7 +2,7 @@ import { Listeners } from "./scripts/keyListeners.js";
 import { Player } from "./scripts/player.js";
 import { Enemy } from "./scripts/enemy.js";
 import { Projectile } from "./scripts/Projectile.js";
-import { angleOfThisPoint } from "./scripts/utils.js";
+import { angleOfThisPoint, rectangleAndCircleCollided } from "./scripts/utils.js";
 import { Room } from "./scripts/Room.js"
 
 const canvas = document.querySelector('canvas');
@@ -47,14 +47,14 @@ const enemies = [];
 const enemy = new Enemy(100, 100, 25, 10, 50, 400);
 enemies.push(enemy);
 
-Listeners();
-
 export const mouse = {
   x: 0,
   y: 0
 };
 
 export const rooms = [];
+
+Listeners(rooms);
 
 const baseRoom = new Room(
   x - 100,
@@ -86,30 +86,66 @@ function animate() {
     enemy.rotateTowardsPlayer();
   });
   projectiles.forEach((projectile) => {
-    projectile.update();
+    projectile.update(rooms);
   });
   rooms.forEach((room) => {
     room.draw()
   })
+
+  let currentSpeed = {
+    x: 0,
+    y: 0,
+  };
   
   if (keysPressed['w']) {
-    player.y -= player.speed;
+    currentSpeed.y = -player.speed;
+    // player.y -= player.speed;
   }
   if (keysPressed['s']) {
-    player.y += player.speed;
+    // player.y += player.speed;
+    currentSpeed.y = player.speed;
   }
   if (keysPressed['a']) {
-    player.x -= player.speed;
+    // player.x -= player.speed;
+    currentSpeed.x = -player.speed;
   }
   if (keysPressed['d']) {
-    player.x += player.speed;
-  }
-  if (keysPressed['d']) {
-    player.x += player.speed;
+    // player.x += player.speed;
+    currentSpeed.x = player.speed;
   }
   if (keysPressed['c']) {
     player.damage(2);
   }
+
+  // set collided to true always for sticky walls hehe
+
+  player.x += currentSpeed.x;
+
+  let collided = false;
+  
+  rooms.forEach((room) => {
+    room.barriers.forEach(barrier => {
+      if (rectangleAndCircleCollided(barrier, player)) {
+        collided = true;
+      }
+    })
+  })
+
+  collided && (player.x -= currentSpeed.x);
+  collided = false;
+
+  player.y += currentSpeed.y;
+
+  rooms.forEach((room) => {
+    room.barriers.forEach(barrier => {
+      if (rectangleAndCircleCollided(barrier, player)) {
+        collided = true;
+      }
+    })
+  })
+
+  collided && (player.y -= currentSpeed.y);
+  collided = false;
 
   player.regen(RECOVERY_RATE);
 
@@ -122,8 +158,8 @@ function animate() {
     player.x = x;
     player.y = y;
   }
+
   player.draw();
-  console.log(mouse)
 }
 
 animate();

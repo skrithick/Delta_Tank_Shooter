@@ -2,7 +2,7 @@ import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
 import { player, projectiles, keysPressed, mouse } from "../main.js";
 
-export function Listeners() {
+export function Listeners(rooms) {
   window.addEventListener('click', (e) => {
     const theta = angleOfThisPoint(e.clientX, e.clientY);
     const projectile = new Projectile(player.x + player.radius*Math.cos(theta), player.y + player.radius*Math.sin(theta), 5, "red", {
@@ -10,8 +10,6 @@ export function Listeners() {
       y: Math.sin(theta) * 5
     }, 5, player);
     projectiles.push(projectile);
-    projectile.draw();
-    projectile.update();
   })
 
   window.addEventListener('keydown', (e) => {
