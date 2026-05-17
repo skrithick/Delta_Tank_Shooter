@@ -1,4 +1,5 @@
 import { Barrier } from "./Barrier.js";
+import { ctx } from '../main.js'
 
 export class Room {
   constructor(x, y, width, height, entrances={}) {
@@ -8,10 +9,12 @@ export class Room {
     this.height = height;
     this.entrances = entrances;
     this.barriers = []
+
+    this.buildRoom();
   }
 
   buildRoom() {
-    const thickness = 20, entranceWidth = 50;
+    const thickness = 10, entranceWidth = 80;
     const p = (this.height + entranceWidth) / 2;
     const q = (this.width + entranceWidth) / 2;
     const halfWallHorizontal = (this.width - entranceWidth) / 2;
@@ -24,6 +27,8 @@ export class Room {
     if (this.entrances.top) {
       this.barriers.push(new Barrier(this.x, this.y, halfWallHorizontal, thickness));
       this.barriers.push(new Barrier(this.x + q, this.y, halfWallHorizontal, thickness));
+    } else {
+      this.barriers.push(new Barrier(this.x, this.y, this.width, thickness));
     }
     if (this.entrances.bottom) {
       this.barriers.push(new Barrier(this.x, this.y + this.height - thickness, halfWallHorizontal, thickness));
@@ -45,7 +50,7 @@ export class Room {
     }
   }
 
-  draw(ctx) {
+  draw() {
     this.barriers.forEach(barrier => barrier.draw(ctx));
   }
 }

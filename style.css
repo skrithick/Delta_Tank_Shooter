@@ -17,11 +17,28 @@ canvas {
   background-size: 50px 50px
 }
 
-h1 {
+h1, div {
   position: absolute;
   width: 100%;
   color: steelblue;
   font-family: "Pixelify Sans", sans-serif;
   /* font-family: "Jersey 10", sans-serif; */
   text-align: center;
+}
+
+div {
+  top: 70%;
+  text-align: left;
+}
+
+.flex {
+  display: flex;
+}
+
+h2 {
+  padding-left: 20px;
+}
+
+ul {
+  text-align: left;
 }

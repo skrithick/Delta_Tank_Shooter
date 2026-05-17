@@ -1,3 +1,5 @@
+import { ctx } from "../main.js";
+
 export class Barrier {
   constructor(x, y, width, height, color='#004400') {
     this.x = x;
@@ -6,7 +8,7 @@ export class Barrier {
     this.height = height;
     this.color = color;
   }
-  draw(ctx) {
+  draw() {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }

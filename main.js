@@ -3,6 +3,7 @@ import { Player } from "./scripts/player.js";
 import { Enemy } from "./scripts/enemy.js";
 import { Projectile } from "./scripts/Projectile.js";
 import { angleOfThisPoint } from "./scripts/utils.js";
+import { Room } from "./scripts/Room.js"
 
 const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
@@ -53,6 +54,27 @@ export const mouse = {
   y: 0
 };
 
+export const rooms = [];
+
+const baseRoom = new Room(
+  x - 100,
+  y-100,
+  200,
+  200,
+  { top: true, bottom: true, left: true, right: true }
+);
+
+
+const newRoom = new Room(
+  x - 100 + 200 + 80,
+  y-75,
+  150,
+  150,
+  { top: false, left: false, right: true, bottom: false }
+);
+
+rooms.push(baseRoom, newRoom)
+
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -66,6 +88,9 @@ function animate() {
   projectiles.forEach((projectile) => {
     projectile.update();
   });
+  rooms.forEach((room) => {
+    room.draw()
+  })
   
   if (keysPressed['w']) {
     player.y -= player.speed;
