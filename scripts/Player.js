@@ -1,4 +1,4 @@
-import { MAX_HEALTH } from "../main.js";
+import { MAX_HEALTH, RECOVERY_RATE, RECOVERY_TIME } from "../main.js";
 import { ctx } from "../main.js";
 
 export class Player {

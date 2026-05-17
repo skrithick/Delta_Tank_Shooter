@@ -10,15 +10,21 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext('2d');
 
+/**
+ * 
+ * IMPLEMENT AMMO COUNT
+ * IMPLEMENT AUTOFIRE
+ * IMPLEMENT FIRERATE
+ * 
+ */
+
 // Break glass in case of powerups
-let MAX_HEALTH = 100;
-let RECOVERY_TIME = 600;
-let RECOVERY_RATE = 0.5;
+export let MAX_HEALTH = 100;
+export let RECOVERY_TIME = 600;
+export let RECOVERY_RATE = 0.5;
 
 /* Gotta think of a better way to regen health */
 
-let mouseX = 0;
-let mouseY = 0;
 let keysPressed = {
   w: false,
   a: false,
@@ -41,6 +47,11 @@ const enemy = new Enemy(100, 100, 25, 10, 50, 400);
 enemies.push(enemy);
 
 Listeners();
+
+export const mouse = {
+  x: 0,
+  y: 0
+};
 
 function animate() {
   requestAnimationFrame(animate);
@@ -77,7 +88,7 @@ function animate() {
 
   player.regen(RECOVERY_RATE);
 
-  player.turretAngle = angleOfThisPoint(mouseX, mouseY);
+  player.turretAngle = angleOfThisPoint(mouse.x, mouse.y);
 
   if (player.health <= 0) {
     alert('Game Over!');
@@ -87,14 +98,9 @@ function animate() {
     player.y = y;
   }
   player.draw();
-  console.log(mouseX)
+  console.log(mouse)
 }
 
 animate();
 
-export const mouse = {
-  x: 0,
-  y: 0
-};
-
-export { player, projectiles, enemies, MAX_HEALTH, RECOVERY_RATE, RECOVERY_TIME, keysPressed, mouseX, mouseY, ctx };  
+export { player, projectiles, enemies, keysPressed, ctx };  

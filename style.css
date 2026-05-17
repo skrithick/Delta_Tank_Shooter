@@ -6,6 +6,15 @@ body {
 canvas {
   display: block;
   background-color: #1e1e1e;
+  
+  /* 1. Draw horizontal lines */
+  /* 2. Draw vertical lines (90deg) */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    
+  /* Set the size of the grid squares */
+  background-size: 50px 50px
 }
 
 h1 {

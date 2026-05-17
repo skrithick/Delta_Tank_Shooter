@@ -1,6 +1,6 @@
 import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
-import { player, projectiles, keysPressed, mouseX, mouseY, mouse } from "../main.js";
+import { player, projectiles, keysPressed, mouse } from "../main.js";
 
 export function Listeners() {
   window.addEventListener('click', (e) => {

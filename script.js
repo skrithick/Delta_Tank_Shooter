@@ -165,9 +165,6 @@ function animate() {
   enemies.forEach((enemy) => {
     enemy.update();
   });
-  enemies.forEach((enemy) => {
-    enemy.rotateTowardsPlayer();
-  });
   projectiles.forEach((projectile) => {
     projectile.update();
   });
