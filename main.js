@@ -152,7 +152,7 @@ function animate() {
   player.turretAngle = angleOfThisPoint(mouse.x, mouse.y);
 
   if (player.health <= 0) {
-    alert('Game Over!');
+    alert('Why would you do that to yourself? Please induct me 😭.');
     keysPressed = {};
     player.health = MAX_HEALTH;
     player.x = x;
