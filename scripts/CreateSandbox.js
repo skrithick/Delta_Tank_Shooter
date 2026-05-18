@@ -10,7 +10,7 @@ export function generateGridMap(rows, cols, roomWidth, roomHeight) {
   enemies.length = 0;
 
   // Configuration
-  const roomSize = 300; 
+  const roomSize = 400; 
   const hallwayLength = 80;
   const padding = 80; 
   const thickness = 10;     // Must match the one inside your Room class!

@@ -6,6 +6,12 @@ import { angleOfThisPoint, rectangleAndCircleCollided } from "./scripts/utils.js
 import { Room } from "./scripts/Room.js"
 import { generateGridMap } from "./scripts/CreateSandbox.js";
 
+/** DEBUGGING THINGS */
+
+export const debugButtons = {
+  'cntrl-shadow': false
+}
+
 const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -74,6 +80,11 @@ const baseRoom = new Room(
   200,
   { top: true, bottom: true, left: true, right: true }
 );
+
+const starting = {
+  x: 280,
+  y: 280
+}
 
 
 const newRoom = new Room(
@@ -179,10 +190,15 @@ function animate() {
 
     if (player.health <= 0) {
       alert('Why would you do that to yourself? Please induct me 😭.');
-      keysPressed = {};
+      for (let key in keysPressed) {
+        keysPressed[key] = false; 
+      }
       player.health = MAX_HEALTH;
-      player.x = 230;
-      player.y = 230;
+      player.x = starting.x;
+      player.y = starting.y;
+      enemies.length = 0;
+      projectiles.length = 0;
+      generateGridMap(3, 20, 800, 600);
     }
 
     enemies.forEach(enemy => {
@@ -193,11 +209,12 @@ function animate() {
     });
 
     // remove for invisibility?
-
+    debugButtons["cntrl-shadow"] && player.drawFlashLight();
     player.draw();
   } else {
     enemies.forEach(enemy => enemy.draw());
     projectiles.forEach(projectile => projectile.draw());
+    debugButtons["cntrl-shadow"] && player.drawFlashLight();
     player.draw();
   }
 
@@ -207,8 +224,8 @@ function animate() {
 
 }
 
-player.x = 230;
-player.y = 230;
+player.x = starting.x;
+player.y = starting.y;
 
 animate();
 

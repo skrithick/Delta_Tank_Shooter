@@ -1,6 +1,6 @@
 import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
-import { player, projectiles, keysPressed, mouse, camera, currentGameState } from "../main.js";
+import { player, projectiles, keysPressed, mouse, camera, currentGameState, debugButtons } from "../main.js";
 
 export function Listeners(rooms) {
   window.addEventListener('click', (e) => {
@@ -13,6 +13,11 @@ export function Listeners(rooms) {
   })
 
   window.addEventListener('keydown', (e) => {
+    /** DEBUGGING THINGS */
+    if (e.ctrlKey) {
+      debugButtons["cntrl-shadow"] = !debugButtons["cntrl-shadow"];
+    }
+
     keysPressed[e.key] = true;
 
     if (e.key === ' ') {
