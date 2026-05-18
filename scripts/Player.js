@@ -14,22 +14,20 @@ export class Player {
     this.speed = speed;
     this.takingDamage = false;
     this.turretAngle = 0;
+    this.lastDamageTime = 0;
   }
 
   damage(amount)
   {
     this.takingDamage = true;
     this.health -= amount;
+    this.lastDamageTime = Date.now();
   }
 
   regen(rate)
   {
-    if (this.takingDamage) {
-      setTimeout(() => {
-        this.takingDamage = false;
-      }, RECOVERY_TIME);
-    }
-    if (!this.takingDamage) {
+    const timeSinceLastHit = Date.now() - this.lastDamageTime;
+    if (timeSinceLastHit >= RECOVERY_TIME) {
       if (this.health < MAX_HEALTH) {
         this.health += rate * (1 - (this.health / MAX_HEALTH));
       }
@@ -77,13 +75,28 @@ export class Player {
 
     const topX = this.x - 25;
     const topY = this.y - this.radius - 15;
+    const barHeight = 10;
 
-    ctx.fillStyle = 'red';
-    ctx.fillRect(topX, topY, 50, 6);
+    const bgGradient = ctx.createLinearGradient(topX, topY, topX, topY + barHeight);
+    bgGradient.addColorStop(0, "rgba(80, 0, 0, 0.9)");  
+    bgGradient.addColorStop(0.5, "rgba(180, 0, 0, 0.9)");
+    bgGradient.addColorStop(1, "rgba(80, 0, 0, 0.9)");  
+
+    ctx.fillStyle = bgGradient;
+    ctx.beginPath()
+    ctx.roundRect(topX, topY, 50, 6, 3);
+    ctx.fill();
+
+    const fgGradient = ctx.createLinearGradient(topX, topY, topX, topY + barHeight);
+    fgGradient.addColorStop(0, "#003f00"); 
+    fgGradient.addColorStop(0.5, "#32cd32");
+    fgGradient.addColorStop(1, "#008800");
 
     const healthPercentage = this.health / this.MAX_HEALTH;
-    ctx.fillStyle = '#32cd32';
-    ctx.fillRect(topX, topY, 50 * healthPercentage, 6);
+    ctx.fillStyle = fgGradient;
+    ctx.beginPath()
+    ctx.roundRect(topX, topY, 50 * healthPercentage, 6, 3);
+    ctx.fill();
     
     ctx.save();
 

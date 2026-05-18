@@ -47,6 +47,7 @@ export function generateGridMap(rows, cols, roomWidth, roomHeight) {
           const randomX = x + 50 + Math.random() * (roomSize - 100);
           const randomY = y + 50 + Math.random() * (roomSize - 100);
           const enemy = new Enemy(randomX, randomY, 25, 20, 100);
+          enemy.color = 'crimson';
           enemies.push(enemy);
         }
       }

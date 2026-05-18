@@ -9,7 +9,7 @@ import { generateGridMap } from "./scripts/CreateSandbox.js";
 /** DEBUGGING THINGS */
 
 export const debugButtons = {
-  'cntrl-shadow': false
+  'cntrl-shadow': true
 }
 
 const canvas = document.querySelector('canvas');
@@ -97,8 +97,11 @@ const newRoom = new Room(
 
 rooms.push(baseRoom, newRoom)
 
-generateGridMap(3, 20, 800, 600);
+function resetMap() {
+  generateGridMap(5, 20, 800, 600);
+}
 
+resetMap();
 
 function animate() {
   requestAnimationFrame(animate);
@@ -198,7 +201,7 @@ function animate() {
       player.y = starting.y;
       enemies.length = 0;
       projectiles.length = 0;
-      generateGridMap(3, 20, 800, 600);
+      resetMap();
     }
 
     enemies.forEach(enemy => {

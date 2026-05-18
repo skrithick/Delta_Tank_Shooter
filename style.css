@@ -33,7 +33,8 @@ h1, div {
 }
 
 div {
-  top: 70%;
+  /* top: 70%; */
+  bottom: 0%;
   text-align: left;
 }
 

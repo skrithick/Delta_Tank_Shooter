@@ -14,7 +14,8 @@ export function Listeners(rooms) {
 
   window.addEventListener('keydown', (e) => {
     /** DEBUGGING THINGS */
-    if (e.ctrlKey) {
+    if (e.key === '\\') {
+      e.preventDefault();
       debugButtons["cntrl-shadow"] = !debugButtons["cntrl-shadow"];
     }
 

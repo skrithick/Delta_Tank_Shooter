@@ -9,7 +9,11 @@ export class Barrier {
     this.color = color;
   }
   draw() {
+    ctx.save();
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#1558109c";
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.restore();
   }
 }
