@@ -4,6 +4,7 @@ import { Enemy } from "./scripts/enemy.js";
 import { Projectile } from "./scripts/Projectile.js";
 import { angleOfThisPoint, rectangleAndCircleCollided } from "./scripts/utils.js";
 import { Room } from "./scripts/Room.js"
+import { generateGridMap } from "./scripts/CreateSandbox.js";
 
 const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
@@ -38,7 +39,7 @@ let keysPressed = {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 25, "blue", 3);
+const player = new Player(x, y, 20, "blue", 3);
 const projectiles = [];
 
 // ENEMIES
@@ -75,6 +76,9 @@ const newRoom = new Room(
 
 rooms.push(baseRoom, newRoom)
 
+generateGridMap(3, 20, 800, 600);
+
+
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -82,9 +86,9 @@ function animate() {
   enemies.forEach((enemy) => {
     enemy.update();
   });
-  enemies.forEach((enemy) => {
-    enemy.rotateTowardsPlayer();
-  });
+  // enemies.forEach((enemy) => {
+  //   enemy.rotateTowardsPlayer();
+  // });
   projectiles.forEach((projectile) => {
     projectile.update(rooms);
   });
@@ -159,8 +163,12 @@ function animate() {
     player.y = y;
   }
 
+  // remove for invisibility?
   player.draw();
 }
+
+player.x = 200;
+player.y = 200;
 
 animate();
 

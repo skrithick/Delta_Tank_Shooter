@@ -29,6 +29,7 @@ export class Projectile extends Player {
   }
   checkCollisionWithSprite() {
     if (this.owner instanceof Enemy) {
+      console.log('boom')
       if (circlesCollided(player, this)) {
         player.damage(20);
         const index = projectiles.indexOf(this);
@@ -52,7 +53,6 @@ export class Projectile extends Player {
             if (index > -1) {
               projectiles.splice(index, 1);
             }
-            console.log(index);
             return true;
           }
         }
@@ -64,13 +64,13 @@ export class Projectile extends Player {
     this.x += this.velocity.x;
     if (this.checkCollisionWithWall(rooms)) {
       this.x -= this.velocity.x
-      this.velocity.x *= (-1)
+      this.velocity.x *= (-0.95)
     }
 
     this.y += this.velocity.y;
     if (this.checkCollisionWithWall(rooms)) {
       this.y -= this.velocity.y
-      this.velocity.y *= (-1)
+      this.velocity.y *= (-0.95)
     }
 
     if (!this.checkCollisionWithSprite()) {

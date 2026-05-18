@@ -4,16 +4,19 @@ import { angleOfThisPoint, rectangleAndCircleCollided } from "./utils.js";
 import { projectiles, player, MAX_HEALTH, rooms } from "../main.js";
 
 export class Enemy extends Player {
-  constructor(x, y, radius, strength, MAX_HEALTH, eyeSight=200, fireRate=1000) {
+  constructor(x, y, radius, strength, MAX_HEALTH, eyeSight=100, fireRate=1000) {
 
-    super(x, y, radius=player.radius * 1.5, 'crimson', 2);
+    super(x, y, 'crimson', 2);
     this.strength = strength;
     this.lastShotTime = 0;
     this.MAX_HEALTH = MAX_HEALTH;
+    this.radius = radius;
+    this.color = 'crimson';
     this.health = MAX_HEALTH;
     this.eyeSight = eyeSight;
     this.speed = player.speed * 0.75;
     this.fireRate = fireRate;
+    this.state = '';
     
   } 
   rotateTowardsPlayer() {
@@ -79,6 +82,7 @@ export class Enemy extends Player {
       this.lastShotTime = currentTime; // Reset the timer
     }
 
+    this.rotateTowardsPlayer()
     this.draw();
   }
 }

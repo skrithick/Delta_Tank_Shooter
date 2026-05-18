@@ -14,7 +14,7 @@ export class Room {
   }
 
   buildRoom() {
-    const thickness = 10, entranceWidth = 80;
+    const thickness = this.width / 40, entranceWidth = 80;
     const p = (this.height + entranceWidth) / 2;
     const q = (this.width + entranceWidth) / 2;
     const halfWallHorizontal = (this.width - entranceWidth) / 2;

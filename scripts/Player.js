@@ -57,7 +57,7 @@ export class Player {
     ctx.translate(this.x, this.y);
     ctx.rotate(this.turretAngle);
     ctx.fillStyle = this.color;
-    ctx.fillRect(0, -10, this.radius + 20, 20);
+    ctx.fillRect(0, -7, this.radius + 10, 15);
 
     ctx.restore();
   }
