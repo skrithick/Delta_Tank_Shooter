@@ -42,8 +42,13 @@ export function generateGridMap(rows, cols, roomWidth, roomHeight) {
       
       // Optional: Spawn enemies here, skipping room (0,0) so the player is safe
       if (r !== 0 || c !== 0) {
-        const enemy = new Enemy(x + 200, y + 100, 25, 20, 100)
-        enemies.push(enemy)
+        const enemyCount = Math.floor(Math.random() * 3) + 1; 
+        for (let i = 0; i < enemyCount; i++) {
+          const randomX = x + 50 + Math.random() * (roomSize - 100);
+          const randomY = y + 50 + Math.random() * (roomSize - 100);
+          const enemy = new Enemy(randomX, randomY, 25, 20, 100);
+          enemies.push(enemy);
+        }
       }
     }
   }

@@ -1,10 +1,10 @@
 import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
-import { player, projectiles, keysPressed, mouse } from "../main.js";
+import { player, projectiles, keysPressed, mouse, camera } from "../main.js";
 
 export function Listeners(rooms) {
   window.addEventListener('click', (e) => {
-    const theta = angleOfThisPoint(e.clientX, e.clientY);
+    const theta = player.turretAngle;
     const projectile = new Projectile(player.x + player.radius*Math.cos(theta), player.y + player.radius*Math.sin(theta), 5, "red", {
       x: Math.cos(theta) * 5,
       y: Math.sin(theta) * 5

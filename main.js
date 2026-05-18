@@ -12,6 +12,11 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext('2d');
 
+export const camera = {
+  x: 0,
+  y: 0
+}
+
 /**
  * 
  * IMPLEMENT AMMO COUNT
@@ -39,7 +44,7 @@ let keysPressed = {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 20, "blue", 3);
+const player = new Player(200, 200, 20, "blue", 3);
 const projectiles = [];
 
 // ENEMIES
@@ -82,6 +87,13 @@ generateGridMap(3, 20, 800, 600);
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  camera.x = player.x - x;
+  camera.y = player.y - y;
+  console.log(camera.x, camera.y)
+
+  ctx.save(); 
+  ctx.translate(-camera.x, -camera.y);
 
   enemies.forEach((enemy) => {
     enemy.update();
@@ -156,7 +168,7 @@ function animate() {
 
   player.regen(RECOVERY_RATE);
 
-  player.turretAngle = angleOfThisPoint(mouse.x, mouse.y);
+  player.turretAngle = angleOfThisPoint(camera.x + mouse.x, camera.y + mouse.y);
 
   if (player.health <= 0) {
     alert('Why would you do that to yourself? Please induct me 😭.');
@@ -166,8 +178,20 @@ function animate() {
     player.y = y;
   }
 
+  enemies.forEach(enemy => {
+    player.preventSpriteCollision(enemy, rooms);
+    enemies.filter(e => e !== enemy).forEach(edash => {
+      enemy.preventSpriteCollision(edash, rooms);
+    })
+  });
+
   // remove for invisibility?
+
   player.draw();
+  ctx.restore();
+
+  // ctx.restore();
+
 }
 
 player.x = 200;

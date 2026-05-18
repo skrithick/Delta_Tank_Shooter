@@ -25,6 +25,13 @@ h1, div {
   text-align: center;
 }
 
+.bugs {
+  position: absolute;
+  color: steelblue;
+  font-family: "Pixelify Sans", sans-serif;
+  margin-left: 10px;
+}
+
 div {
   top: 70%;
   text-align: left;

@@ -34,55 +34,48 @@ export class Enemy extends Player {
   }
   update() {
     const distanceToPlayer = Math.hypot(player.x - this.x, player.y - this.y);
+    
+    const attackRange = this.eyeSight;
+    const chaseRange = this.eyeSight * 2;
 
-    if (distanceToPlayer < this.eyeSight) {
+    if (distanceToPlayer < chaseRange) {
       this.rotateTowardsPlayer();
 
-      let currentSpeed = {
-        x: -Math.cos(angleOfThisPoint(this.x, this.y)) * this.speed,
-        y: -Math.sin(angleOfThisPoint(this.x, this.y)) * this.speed
-      };
+      if (distanceToPlayer >= attackRange) {
+        const currentTime = Date.now();
+        if (currentTime - this.lastShotTime > this.fireRate) {
+          this.shoot();
+          this.lastShotTime = currentTime; 
+        }
+      } 
+      
+      else {
+        let currentSpeed = {
+          x: -Math.cos(angleOfThisPoint(this.x, this.y)) * this.speed,
+          y: -Math.sin(angleOfThisPoint(this.x, this.y)) * this.speed
+        };
 
-      // remove everything but this line for necromancer guy
-      this.x += currentSpeed.x;
-      
-      let collided = false;
-      
-      rooms.forEach((room) => {
-        room.barriers.forEach(barrier => {
-          if (rectangleAndCircleCollided(barrier, this)) {
-            collided = true;
-          }
-        })
-      })
-    
-      collided && (this.x -= currentSpeed.x);
-      collided = false;
-      
-      // remove everything but this line for necromancer guy
-      this.y += currentSpeed.y;
-    
-      rooms.forEach((room) => {
-        room.barriers.forEach(barrier => {
-          if (rectangleAndCircleCollided(barrier, this)) {
-            collided = true;
-          }
-        })
-      })
-    
-      collided && (this.y -= currentSpeed.y);
-      collided = false;
+        let collided = false;
 
+        this.x += currentSpeed.x;
+        rooms.forEach((room) => {
+          room.barriers.forEach(barrier => {
+            if (rectangleAndCircleCollided(barrier, this)) collided = true;
+          });
+        });
+        collided && (this.x -= currentSpeed.x);
+        collided = false;
+
+        this.y += currentSpeed.y;
+        rooms.forEach((room) => {
+          room.barriers.forEach(barrier => {
+            if (rectangleAndCircleCollided(barrier, this)) collided = true;
+          });
+        });
+        collided && (this.y -= currentSpeed.y);
+      }
     }
 
-    const currentTime = Date.now();
-
-    if (currentTime - this.lastShotTime > this.fireRate && distanceToPlayer < this.eyeSight) {
-      this.shoot();
-      this.lastShotTime = currentTime; // Reset the timer
-    }
-
-    this.rotateTowardsPlayer()
     this.draw();
   }
 }

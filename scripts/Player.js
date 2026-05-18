@@ -1,5 +1,6 @@
 import { MAX_HEALTH, RECOVERY_RATE, RECOVERY_TIME } from "../main.js";
 import { ctx } from "../main.js";
+import { rectangleAndCircleCollided } from "./utils.js";
 
 export class Player {
   constructor(x, y, radius, color, speed)
@@ -34,7 +35,39 @@ export class Player {
       }
     }
   }
+  checkCollisionWithWall(rooms) {
+    for (const room of rooms) {
+      for (const barrier of room.barriers) {
+        if (rectangleAndCircleCollided(barrier, this)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  preventSpriteCollision(sprite, rooms) {
+    const deltax = sprite.x - this.x
+    const deltay = sprite.y - this.y
+    const delta = Math.hypot(deltax, deltay)
+    const mindelta = this.radius + sprite.radius
 
+    if (delta < mindelta) {
+      const overlap = mindelta - delta;
+      const normx = deltax/delta;
+      const normy = deltay/delta;
+
+      this.x -= normx * overlap / 2;
+      this.checkCollisionWithWall(rooms) ? 
+        this.x += normx * overlap / 2 : ``
+
+      this.y -= normy * overlap / 2;
+      this.checkCollisionWithWall(rooms) ? 
+        this.y += normy * overlap / 2 : ``
+
+      sprite.x += normx * overlap / 2;
+      sprite.y += normy * overlap / 2;
+    }
+  }
   draw()
   {
     ctx.beginPath();
