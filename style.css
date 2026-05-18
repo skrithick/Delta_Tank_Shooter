@@ -10,8 +10,8 @@ canvas {
   /* 1. Draw horizontal lines */
   /* 2. Draw vertical lines (90deg) */
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(15, 161, 30, 0.05) 2px, transparent 1px),
+    linear-gradient(90deg, rgba(38, 255, 0, 0.05) 2px, transparent 1px);
   /* Set the size of the grid squares */
   background-size: 50px 50px
 }

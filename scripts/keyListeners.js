@@ -1,6 +1,6 @@
 import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
-import { player, projectiles, keysPressed, mouse, camera } from "../main.js";
+import { player, projectiles, keysPressed, mouse, camera, currentGameState } from "../main.js";
 
 export function Listeners(rooms) {
   window.addEventListener('click', (e) => {
@@ -14,6 +14,12 @@ export function Listeners(rooms) {
 
   window.addEventListener('keydown', (e) => {
     keysPressed[e.key] = true;
+
+    if (e.key === ' ') {
+      e.preventDefault(); 
+
+      currentGameState.PAUSED = !currentGameState.PAUSED
+    }
   });
 
   window.addEventListener('keyup', (e) => {
