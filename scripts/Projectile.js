@@ -1,7 +1,7 @@
 import { Player } from "./Player.js";
-import { ctx, player, projectiles, enemies } from "../main.js";
+import { ctx, /* player, projectiles, enemies */ } from "../main.js";
 import { rectangleAndCircleCollided, circlesCollided } from "./utils.js";
-import { Enemy } from "./enemy.js";
+// import { Enemy } from "./enemy.js";
 
 export class Projectile extends Player {
   constructor(x, y, radius, color, velocity, speed, owner)
@@ -9,6 +9,7 @@ export class Projectile extends Player {
     super(x, y, radius, color, velocity);
     this.velocity = velocity;
     this.owner = owner;
+    // this.isDead = false;
   }
   draw()
   {
@@ -27,8 +28,8 @@ export class Projectile extends Player {
     }
     return false;
   }
-  checkCollisionWithSprite() {
-    if (this.owner instanceof Enemy) {
+  checkCollisionWithSprite(player, enemies, projectiles) {
+    if (this.owner !== player) {
       console.log('boom')
       if (circlesCollided(player, this)) {
         player.damage(20);
@@ -59,7 +60,7 @@ export class Projectile extends Player {
     }
     return false;
   }
-  update(rooms)
+  update(rooms, player, enemies, projectiles)
   {
     this.x += this.velocity.x;
     if (this.checkCollisionWithWall(rooms)) {
@@ -73,7 +74,7 @@ export class Projectile extends Player {
       this.velocity.y *= (-0.95)
     }
 
-    if (!this.checkCollisionWithSprite()) {
+    if (!this.checkCollisionWithSprite(player, enemies, projectiles)) {
       this.draw();
     }
   }

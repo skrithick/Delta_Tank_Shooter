@@ -90,7 +90,10 @@ function animate() {
   //   enemy.rotateTowardsPlayer();
   // });
   projectiles.forEach((projectile) => {
-    projectile.update(rooms);
+    projectile.update(rooms, player, enemies, projectiles);
+    if (projectile.isDead) {
+      projectiles.splice(projectiles.indexOf(projectile), 1);
+    }
   });
   rooms.forEach((room) => {
     room.draw()

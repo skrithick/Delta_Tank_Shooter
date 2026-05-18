@@ -5,11 +5,11 @@ import { Barrier } from "./Barrier.js";
 // Assuming 'rooms' and 'enemies' are your global arrays in main.js
 
 export function generateGridMap(rows, cols, roomWidth, roomHeight) {
-  // Clear the map
+  // Empty everything
   rooms.length = 0;
   enemies.length = 0;
 
-  // Configuration (Adjust these to fit your exact canvas size!)
+  // Configuration
   const roomSize = 300; 
   const hallwayLength = 80;
   const padding = 80; 
