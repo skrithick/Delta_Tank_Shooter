@@ -6,14 +6,37 @@ body {
 canvas {
   display: block;
   background-color: #1e1e1e;
-  
-  /* 1. Draw horizontal lines */
-  /* 2. Draw vertical lines (90deg) */
   background-image: 
-    linear-gradient(rgba(15, 161, 30, 0.05) 2px, transparent 1px),
-    linear-gradient(90deg, rgba(38, 255, 0, 0.05) 2px, transparent 1px);
-  /* Set the size of the grid squares */
-  background-size: 50px 50px
+    linear-gradient(rgba(15, 161, 30, 0.05) 2px, transparent 3px),
+    linear-gradient(90deg, rgba(38, 255, 0, 0.05) 2px, transparent 3px);
+  background-size: 50px 50px;
+}
+
+.bugs {
+  color: #ccc;
+}
+
+.coloured {
+  color: steelblue;
+}
+
+.title::after {
+  width: 400px;
+  height: 5px;
+  content: ' ';
+  background-color: steelblue;
+  display: block;
+  margin-inline: auto;
+  margin-top: 10px;
+}
+.title::before {
+  width: 400px;
+  height: 5px;
+  content: ' ';
+  margin-bottom: 10px;
+  background-color: steelblue;
+  display: block;
+  margin-inline: auto;
 }
 
 h1, div {
@@ -25,17 +48,96 @@ h1, div {
   text-align: center;
 }
 
+.gameover {
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e;
+  background-image: 
+    linear-gradient(rgba(15, 161, 30, 0.05) 2px, transparent 5px),
+    linear-gradient(90deg, rgba(38, 255, 0, 0.05) 2px, transparent 5px);
+  background-size: 50px 50px;
+}
+
+.gameover h1 {
+  margin-bottom: 4em;
+  font-size: 4em;
+}
+
+.gameover span {
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: block;
+  font-size: 2em;
+}
+
+.gameover .btn {
+  font-family: inherit;
+  background-color: steelblue;
+  color: #ccc;
+  font-size: 2em;
+  border: none;
+  padding: 10px 30px;
+  outline: 2px dashed steelblue;
+  margin-top: 30px;
+  outline-offset: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.1s all ease-in-out;
+}
+
+.close {
+  position: absolute;
+  top: 15%;
+  left: 29.5%;
+}
+
+.gameover .btn:hover {
+  background-color: rgb(60, 110, 152);
+  outline-offset: 8px;
+  box-shadow: 0px 0px 10px rgba(64, 135, 209, 0.87);
+}
+
+.gameover#gamestart {
+  display: flex;
+}
+
+p {
+  padding: 20px 40px;
+  border-radius: 10px;
+  max-width: 300px;
+  border: 2px dashed steelblue;
+  outline: 2px solid rgba(70, 131, 180, 0.269);
+  outline-offset: 4px;
+  color: #ccc;
+  background-color: #00000017;
+}
+
 .bugs {
   position: absolute;
-  color: steelblue;
   font-family: "Pixelify Sans", sans-serif;
   margin-left: 10px;
+  font-size: 1.3em;
+}
+
+.bugs span {
+  color: steelblue;
 }
 
 div {
   /* top: 70%; */
+  position: absolute;
   bottom: 0%;
   text-align: left;
+}
+
+div.tips p {
+  margin-left: 20px;
+  margin-bottom: 40px;
 }
 
 .flex {

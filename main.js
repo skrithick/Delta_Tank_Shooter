@@ -1,10 +1,15 @@
-import { Listeners } from "./scripts/keyListeners.js";
+import { gameOver, Listeners, restartGame } from "./scripts/keyListeners.js";
 import { Player } from "./scripts/player.js";
 import { Enemy } from "./scripts/enemy.js";
 import { Projectile } from "./scripts/Projectile.js";
 import { angleOfThisPoint, rectangleAndCircleCollided } from "./scripts/utils.js";
 import { Room } from "./scripts/Room.js"
 import { generateGridMap } from "./scripts/CreateSandbox.js";
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  document.getElementById('gamestart').style = 'display: none';
+  currentGameState.PAUSED = false;
+})
 
 /** DEBUGGING THINGS */
 
@@ -24,7 +29,7 @@ export const camera = {
 }
 
 export const currentGameState = {
-  PAUSED: false,
+  PAUSED: true,
   GAME_OVER: false
 }
 
@@ -38,7 +43,7 @@ export const currentGameState = {
 
 // Break glass in case of powerups
 export let MAX_HEALTH = 100;
-export let RECOVERY_TIME = 600;
+export let RECOVERY_TIME = 1000;
 export let RECOVERY_RATE = 0.5;
 
 /* Gotta think of a better way to regen health */
@@ -69,9 +74,13 @@ export const mouse = {
   y: 0
 };
 
+export const points = {
+  points: 0
+}
+
 export const rooms = [];
 
-Listeners(rooms);
+Listeners();
 
 const baseRoom = new Room(
   x - 100,
@@ -81,7 +90,7 @@ const baseRoom = new Room(
   { top: true, bottom: true, left: true, right: true }
 );
 
-const starting = {
+export const starting = {
   x: 280,
   y: 280
 }
@@ -97,7 +106,7 @@ const newRoom = new Room(
 
 rooms.push(baseRoom, newRoom)
 
-function resetMap() {
+export function resetMap() {
   generateGridMap(5, 20, 800, 600);
 }
 
@@ -192,16 +201,11 @@ function animate() {
     player.turretAngle = angleOfThisPoint(camera.x + mouse.x, camera.y + mouse.y);
 
     if (player.health <= 0) {
-      alert('Why would you do that to yourself? Please induct me 😭.');
-      for (let key in keysPressed) {
-        keysPressed[key] = false; 
-      }
-      player.health = MAX_HEALTH;
-      player.x = starting.x;
-      player.y = starting.y;
-      enemies.length = 0;
-      projectiles.length = 0;
-      resetMap();
+      // game over
+      console.log(player.health)
+      gameOver();
+      // alert('Why would you do that to yourself? Please induct me 😭.');
+      
     }
 
     enemies.forEach(enemy => {

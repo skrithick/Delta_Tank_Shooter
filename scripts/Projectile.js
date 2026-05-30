@@ -1,6 +1,8 @@
 import { Player } from "./Player.js";
-import { ctx, /* player, projectiles, enemies */ } from "../main.js";
+import { ctx, points, /* player, projectiles, enemies */ } from "../main.js";
 import { rectangleAndCircleCollided, circlesCollided } from "./utils.js";
+import { updateHUD } from "./keyListeners.js";
+// import { Sniper } from "./enemy.js";
 // import { Enemy } from "./enemy.js";
 
 export class Projectile extends Player {
@@ -9,7 +11,8 @@ export class Projectile extends Player {
     super(x, y, radius, color, velocity);
     this.velocity = velocity;
     this.owner = owner;
-    // this.isDead = false;
+    this.bounceCount = 0;
+    this.isDead = false;
   }
   draw()
   {
@@ -22,6 +25,10 @@ export class Projectile extends Player {
     for (const room of rooms) {
       for (const barrier of room.barriers) {
         if (rectangleAndCircleCollided(barrier, this)) {
+          this.bounceCount++;
+          if (this.bounceCount >= 5) {
+            this.isDead = true;
+          }
           return true;
         }
       }
@@ -30,9 +37,10 @@ export class Projectile extends Player {
   }
   checkCollisionWithSprite(player, enemies, projectiles) {
     if (this.owner !== player) {
-      console.log('boom')
+      // console.log('boom')
       if (circlesCollided(player, this)) {
-        player.damage(20);
+        player.damage(this.owner.strength);
+        updateHUD();
         const index = projectiles.indexOf(this);
         if (index > -1) {
           projectiles.splice(index, 1);
@@ -40,14 +48,17 @@ export class Projectile extends Player {
         return true;
       }
     }
-    if (this.owner == player) {
+    if (this.owner === player) {
         for (const enemy of enemies) {
           if (circlesCollided(enemy, this)) {
+            // console.log(enemy)
             enemy.damage(10);
             if (enemy.health <= 0) {
               const enemyIndex = enemies.indexOf(enemy);
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1);
+                points.points += 20;
+                updateHUD();
               }
             }
             const index = projectiles.indexOf(this);
@@ -62,6 +73,12 @@ export class Projectile extends Player {
   }
   update(rooms, player, enemies, projectiles)
   {
+    if (this.isDead) {
+      const index = projectiles.indexOf(this);
+      if (index > -1) {
+        projectiles.splice(index, 1);
+      }
+    }
     this.x += this.velocity.x;
     if (this.checkCollisionWithWall(rooms)) {
       this.x -= this.velocity.x

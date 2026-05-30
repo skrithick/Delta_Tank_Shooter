@@ -1,5 +1,6 @@
 import { MAX_HEALTH, RECOVERY_RATE, RECOVERY_TIME } from "../main.js";
 import { ctx, camera } from "../main.js";
+import { updateHUD } from "./keyListeners.js";
 import { rectangleAndCircleCollided } from "./utils.js";
 
 export class Player {
@@ -13,8 +14,10 @@ export class Player {
     this.health = MAX_HEALTH;
     this.speed = speed;
     this.takingDamage = false;
+    this.turretWidth = 15;
     this.turretAngle = 0;
     this.lastDamageTime = 0;
+    this.turretLength = 10;
   }
 
   damage(amount)
@@ -32,6 +35,7 @@ export class Player {
         this.health += rate * (1 - (this.health / MAX_HEALTH));
       }
     }
+    updateHUD();
   }
   checkCollisionWithWall(rooms) {
     for (const room of rooms) {
@@ -66,13 +70,13 @@ export class Player {
       sprite.y += normy * overlap / 2;
     }
   }
-  draw()
-  {
+  drawBody() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
     ctx.fill();
-
+  }
+  drawHealthBar() {
     const topX = this.x - 25;
     const topY = this.y - this.radius - 15;
     const barHeight = 10;
@@ -99,13 +103,24 @@ export class Player {
     ctx.fill();
     
     ctx.save();
-
+  }
+  drawTurret() {
     ctx.translate(this.x, this.y);
     ctx.rotate(this.turretAngle);
     ctx.fillStyle = this.color;
-    ctx.fillRect(0, -7, this.radius + 10, 15);
+    ctx.fillRect(0, -7, this.radius + this.turretLength, this.turretWidth);
 
     ctx.restore();
+  }
+  draw()
+  {
+    this.drawBody();
+    this.drawHealthBar();
+    this.drawTurret();
+
+    
+
+    
   }
   drawFlashLight() {
     const fov = Math.PI / 3; 
@@ -116,7 +131,7 @@ export class Player {
     ctx.save();
     
     ctx.beginPath();
-    ctx.rect(camera.x - 2000, camera.y - 2000, 6000, 6000); 
+    ctx.rect(camera.x - 2000, camera.y - 2000, 6000, 6000);
     ctx.moveTo(this.x, this.y);
     ctx.arc(this.x, this.y, sightDistance, startAngle, endAngle);
     ctx.closePath();

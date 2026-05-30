@@ -8,29 +8,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet"> -->
 
 <body>
-  <h1>DAY 4 of working on this game</h1>
-  <p class="bugs" style="padding: 10px; border-radius: 10px; max-width: 300px; border: 1px dashed steelblue; background-color: #00000017;">
-    Bugs: Enemy pushing player into walls, camera not centered on map when launched. Fighting is not as fun, tanks move too fast.
+  <h1>The Big Boy</h1>
+  <p class="bugs">
+    Health: <span id="health">90</span>
+    <br>
+    <br>
+    Points: <span id="points">400</span>
   </p>
-  <div>
-    <div class="flex">
-      <h2>Todos:</h2>
-      <ul>
-        <li>Make the rooms look better</li>
-        <li>Add player visibility</li>
-        <li>Make nice designs for player and enemy</li>
-      </ul>
-      <ul>
-        <li>Adjust player Fire rate</li>
-        <li>Display player health</li>
-        <li>If possible, create a bottom satus bar</li>
-      </ul>
-      <p style="margin-left: 60px; padding: 10px; border-radius: 10px; max-width: 420px; border: 1px dashed steelblue; background-color: #00000017;">
-        Click to shoot, and hold c to take damage, WASD to move. The red guy will follow and shoot (if you get too close). <span style="padding: 5px; background-color: #0000007e;">PS: Try pressing \</span> Press space to pause.
-      </p>
-    </div>
-  </div>
-<canvas></canvas>  
+<canvas></canvas>
+<div class="gameover" id="gameover">
+  <h1>Game over</h1>
+  <span id="showpoints">Points: </span>
+  <button class="btn" id="btn">Play Again</button>
+</div>
+<div class="gameover" id="gamestart">
+  <h1 class="title">The Big Boy</h1>
+  <button class="btn" id="start-btn">Start Game</button>
+</div>
+<div class="tips">
+  <p>
+    <span class="coloured">WASD</span> to move, <span class="coloured">mouse</span> to look <span class="coloured">click</span> to shoot, and <span class="coloured">space</span> to pause.
+    <br />
+    <br />
+    <span class="coloured">Pro tip: Careful around the big boy.</span>
+  </p>
+</div>
 </body>
 
 <script type="module" src="./main.js"></script>
