@@ -43,7 +43,7 @@ export const currentGameState = {
 
 // Break glass in case of powerups
 export let MAX_HEALTH = 100;
-export let RECOVERY_TIME = 1000;
+export let RECOVERY_TIME = 1500;
 export let RECOVERY_RATE = 0.5;
 
 /* Gotta think of a better way to regen health */

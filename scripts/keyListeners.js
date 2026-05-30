@@ -2,14 +2,20 @@ import { angleOfThisPoint } from "./utils.js";
 import { Projectile } from "./Projectile.js";
 import { player, projectiles, keysPressed, mouse, camera, currentGameState, debugButtons, points, enemies, resetMap, MAX_HEALTH, starting } from "../main.js";
 
+let lastShotTime = Date.now();
+
 export function Listeners() {
   window.addEventListener('click', (e) => {
-    const theta = player.turretAngle;
-    const projectile = new Projectile(player.x + player.radius*Math.cos(theta), player.y + player.radius*Math.sin(theta), 5, "red", {
-      x: Math.cos(theta) * 5,
-      y: Math.sin(theta) * 5
-    }, 5, player);
-    projectiles.push(projectile);
+    let currentTime = Date.now();
+    if (currentTime - lastShotTime >= 300) {
+      const theta = player.turretAngle;
+      const projectile = new Projectile(player.x + player.radius*Math.cos(theta), player.y + player.radius*Math.sin(theta), 5, "red", {
+        x: Math.cos(theta) * 5,
+        y: Math.sin(theta) * 5
+      }, 5, player);
+      projectiles.push(projectile);
+      lastShotTime = currentTime;
+    }
   })
 
   window.addEventListener('keydown', (e) => {

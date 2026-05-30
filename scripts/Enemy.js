@@ -97,8 +97,8 @@ export class Machiner extends Enemy {
   constructor(x, y) {
     super(x, y);
     this.color = 'orange';
-    this.fireRate /= 3;
-    this.strength = 5;
+    this.fireRate /= 5;
+    this.strength = 3;
     this.eyeSight = 150;
     this.radius /= 1.5;
   }
