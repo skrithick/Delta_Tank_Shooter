@@ -100,7 +100,7 @@ export class Machiner extends Enemy {
     this.fireRate /= 3;
     this.strength = 5;
     this.eyeSight = 150;
-    this.radius /= 1.2;
+    this.radius /= 1.5;
   }
 }
 
